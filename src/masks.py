@@ -19,6 +19,7 @@ def card_number_hider(payment_number: int) -> str:
         hidden_payment_number = f"{str_payment_number[0:4]} {str_payment_number[4:6]}** **** {str_payment_number[-4:]}"
         return hidden_payment_number
     else:
+        logger.error('Пользователь ввёл некоректные данные')
         return "Ошибка! Введите корректные данные"
 
 
@@ -30,10 +31,6 @@ def account_number_hider(account: int) -> str:
         hidden_payment_account = "**" + str_account[-4:]
         return hidden_payment_account
     else:
+        logger.error('Пользователь ввёл некоректные данные')
         return "Ошибка! Введите корректные данные"
 
-
-if __name__ == "__main__":
-    result = card_number_hider(7000792289606361)
-    result_1 = account_number_hider(73654108430135874305)
-    print(result_1)
