@@ -24,7 +24,7 @@ def func_for_read_excel(filename: str) -> list[dict]:
 
 
 if __name__ == "__main__":
-    test = func_for_read_csv("transaction.csv")
+    test = func_for_read_csv("../data/transaction.csv")
     print(test)
-    test2 = func_for_read_excel("transactions_excel.xlsx")
+    test2 = func_for_read_excel("../data/transactions_excel.xlsx")
     print(test2)
