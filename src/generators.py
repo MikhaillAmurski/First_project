@@ -59,9 +59,6 @@ def filter_by_currency(bank_list, bank_currency):
 
 usd_transactions = filter_by_currency(transactions, "USD")
 
-for _ in range(2):
-    print(next(usd_transactions)["id"])
-
 
 def transaction_descriptions(bank_list):
     """генератор, который принимает список словарей и возвращает описание каждой операции по очереди"""
@@ -72,10 +69,6 @@ def transaction_descriptions(bank_list):
 descriptions = transaction_descriptions(transactions)
 
 
-for i in range(5):
-    print(next(descriptions))
-
-
 def card_number_generator(first_num, last_num):
     """генератор номеров банковских карт"""
     for num in range(first_num, last_num + 1):
@@ -84,6 +77,10 @@ def card_number_generator(first_num, last_num):
         yield card_number
 
 
-for card_number in card_number_generator(1, 9):
-    print(card_number)
-
+if __name__ == "__main__":
+    for card_number in card_number_generator(1, 9):
+        print(card_number)
+    for i in range(5):
+        print(next(descriptions))
+    for _ in range(2):
+        print(next(usd_transactions)["id"])
