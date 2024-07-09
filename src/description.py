@@ -1,6 +1,4 @@
 import re
-from typing import List
-
 from utils import get_data_transactions
 import random
 
