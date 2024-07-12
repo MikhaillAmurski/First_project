@@ -3,11 +3,7 @@ from src.widget import get_data
 
 def filter_by_state(list_dict: list, state: str = "EXECUTED") -> list:
     """Функция фильтрации операций по ключу state"""
-    new_list = []
-    for i in list_dict:
-        for key, value in i.items():
-            if value == state:
-                new_list.append(i)
+    new_list = list(filter(lambda x: x.get("state") == state, list_dict))
     return new_list
 
 

@@ -20,7 +20,7 @@ def card_number_hider(payment_number: int) -> str:
         return hidden_payment_number
     else:
         logger.error('Пользователь ввёл некоректные данные')
-        return "Ошибка! Введите корректные данные"
+        return "Неизвестный счёт"
 
 
 def account_number_hider(account: int) -> str:
@@ -32,5 +32,5 @@ def account_number_hider(account: int) -> str:
         return hidden_payment_account
     else:
         logger.error('Пользователь ввёл некоректные данные')
-        return "Ошибка! Введите корректные данные"
+        return "Неизвестный счёт"
 

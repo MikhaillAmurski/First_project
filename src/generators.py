@@ -52,7 +52,7 @@ transactions = [
 def filter_by_currency(bank_list, bank_currency):
     """итератор, который выдает по очереди операции, в которых указана заданная валюта"""
     my_currency: Generator[Any, Any, None] = (
-        x for x in bank_list if x["operationAmount"]["currency"]["code"] == bank_currency
+        x for x in bank_list if x["currency_code"] == bank_currency
     )
     yield from my_currency
 

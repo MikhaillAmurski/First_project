@@ -115,7 +115,7 @@ def result_printing(operations: list[dict]) -> None:
             else:
                 print(f'{mask_account_card(operation["from"])} -> {mask_account_card(operation["to"])}')
 
-            print(f"Сумма {operation['operationAmount']['amount']} {operation["operationAmount"]["currency"]["code"]}")
+            print(f"Сумма {operation['amount']} {operation["currency_code"]}")
 
 
 def main() -> None:

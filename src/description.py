@@ -21,7 +21,7 @@ def description_transaction(transactions: list[dict], my_string: str) -> list[di
     if my_transactions:
         return my_transactions
     else:
-        return "Такого описания нет"
+        return []
 
 
 if __name__ == "__main__":
