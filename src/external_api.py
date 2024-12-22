@@ -1,30 +1,20 @@
-import requests
 import os
-from src.utils import get_data_transactions
+
+import requests
 from dotenv import load_dotenv
 
-
-load_dotenv("..\\.env")
-
-path = "..\\data\\operations.json"
+load_dotenv()
+API_KEY = os.getenv("API_KEY")
 
 
-def amount_transaction(transaction_by_id):
-    """функция возвращает сумму транзакции в рублях"""
-
-    trans_amount = transaction_by_id["operationAmount"]["amount"]
-    trans_code = transaction_by_id["operationAmount"]["currency"]["code"]
-    API_KEY = os.getenv("API_KEY")
-    headers_api = {"apikey": API_KEY}
-    if trans_code == "RUB":
-        return trans_amount
+def currency_conversion(transaction: dict) -> float:
+    """Функция для конвертации валюты в рубли"""
+    amount = transaction["operationAmount"]["amount"]
+    currency = transaction["operationAmount"]["currency"]["code"]
+    if currency == "RUB":
+        return float(amount)
     else:
-        try:
-
-            url = f"https://api.apilayer.com/fixer/convert?to=RUB&from={trans_code}&amount={trans_amount}"
-
-            response = requests.request("GET", url, headers=headers_api)
-            my_result = response.json()
-            return my_result["result"]
-        except Exception as e:
-            print(e)
+        url = f"https://api.apilayer.com/exchangerates_data/convert?to=RUB&from={currency}&amount={amount}"
+        response = requests.get(url, headers={"apikey": API_KEY})
+        data = response.json()
+        return float(data["result"])
