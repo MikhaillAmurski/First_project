@@ -1,5 +1,5 @@
 import re
-from utils import get_data_transactions
+from utils import get_financial_transactions
 import random
 
 
@@ -26,7 +26,7 @@ def description_transaction(transactions: list[dict], my_string: str) -> list[di
 
 if __name__ == "__main__":
     path = "../data/operations.json"
-    list_trans = get_data_transactions(path)
+    list_trans = get_financial_transactions(path)
     my_string = random.choice(["Перевод со счета на счет",
                                "Перевод организации",
                                "Перевод с карты на карту",
