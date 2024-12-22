@@ -17,4 +17,3 @@ def mask_account_card(card_details: str) -> str:
 def get_date(user_date: str) -> str:
     """Функция для преобразования даты"""
     return f"{user_date[8:10]}.{user_date[5:7]}.{user_date[0:4]}"
-#+++

@@ -29,4 +29,3 @@ def get_mask_account(account_number: str) -> str:
     else:
         mask_account_logger.info('Неверные данные')
         return "Неверные данные"
-#+++
