@@ -1,36 +1,31 @@
 import logging
 
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(filename)s - %(levelname)s - %(message)s',
+                    filename='../logs/masks_log.log',
+                    filemode='w')
 
-logger = logging.getLogger(__name__)
-file_handler = logging.FileHandler('../logs/masks.log', encoding='utf-8')
-file_formatter = logging.Formatter(
-    "%(asctime)s - %(name)s - %(levelname)s: %(message)s"
-)
-file_handler.setFormatter(file_formatter)
-logger.addHandler(file_handler)
-logger.setLevel(logging.INFO)
+mask_card_number_logger = logging.getLogger()
+mask_account_logger = logging.getLogger()
 
 
-def card_number_hider(payment_number: int) -> str:
-    """Функция для скрытия номера карты"""
-    logger.info("Маскируем карту клиента")
-    str_payment_number = str(payment_number)
-    if len(str_payment_number) == 16:
-        hidden_payment_number = f"{str_payment_number[0:4]} {str_payment_number[4:6]}** **** {str_payment_number[-4:]}"
-        return hidden_payment_number
+def get_mask_card_number(card_number: str) -> str:
+    """Функция маскировки номера карты"""
+    mask_card_number_logger.info('Запуск маскировки номера карты')
+    if card_number.isdigit() and len(card_number) == 16:
+        mask_card_number_logger.info('Маска номера карты создана')
+        return f"{card_number[0: 4]} {card_number[4: 6]}{"*" * 2} {"*" * 4} {card_number[-4:]}"
     else:
-        logger.error('Пользователь ввёл некоректные данные')
-        return "Неизвестный счёт"
+        mask_card_number_logger.info('Неверные данные')
+        return "Неверные данные"
 
 
-def account_number_hider(account: int) -> str:
-    """Функция для скрытия номера счёта"""
-    logger.info('Маскируем номер счёта')
-    str_account = str(account)
-    if len(str_account) == 20:
-        hidden_payment_account = "**" + str_account[-4:]
-        return hidden_payment_account
+def get_mask_account(account_number: str) -> str:
+    """Функция маскировки номера счета"""
+    mask_account_logger.info('Запуск маскировки номера счета')
+    if account_number.isdigit() and len(account_number) == 20:
+        mask_account_logger.info('Маска номера счета создана')
+        return f"{"*" * 2}{account_number[-4::]}"
     else:
-        logger.error('Пользователь ввёл некоректные данные')
-        return "Неизвестный счёт"
-
+        mask_account_logger.info('Неверные данные')
+        return "Неверные данные"

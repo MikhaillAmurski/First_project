@@ -1,21 +1,19 @@
-from src.masks import account_number_hider, card_number_hider
+from src.masks import get_mask_account, get_mask_card_number
 
 
-def mask_account_card(info_account_card: str) -> str:
-    """Функция для скрытия номера карты или счёта"""
-    name_card = ""
-    nun_card = ""
-    for i in info_account_card:
-        if i.isalpha() is True or i == " ":
-            name_card = name_card + i
-        elif i.isdigit():
-            nun_card = nun_card + i
-    if name_card == "Счет ":
-        return f"{name_card + account_number_hider(int(nun_card))}"
+def mask_account_card(card_details: str) -> str:
+    """Функция маскирует номер счета/карты"""
+    number = card_details.split(" ")[-1]
+    if number.isdigit() and len(number) == 16:
+        masks = get_mask_card_number(number)
+        return f"{card_details[:-16]}{masks}"
+    elif number.isdigit() and len(number) == 20:
+        masks = get_mask_account(number)
+        return f"{card_details[:-20]}{masks}"
     else:
-        return f"{name_card + card_number_hider(int(nun_card))}"
+        return "Неверные данные"
 
 
-def get_data(info_of_date: str) -> str:
+def get_date(user_date: str) -> str:
     """Функция для преобразования даты"""
-    return f"{info_of_date[8:10]}.{info_of_date[5:7]}.{info_of_date[0:4]}"
+    return f"{user_date[8:10]}.{user_date[5:7]}.{user_date[0:4]}"
