@@ -1,30 +1,20 @@
-import csv
-import json
 import pandas as pd
 
 
-def func_for_read_csv(filename: str) -> list[dict]:
-    """Функция для считывания данных в формате CSV и возврата в виде списка словорей"""
-    with open(filename, "r", encoding="utf-8") as file:
-        reader = csv.reader(file, delimiter=";")
-        header = next(reader)
-        result = []
-        for row in reader:
-            row_dict = dict()
-            for i, item in enumerate(header):
-                row_dict[item] = row[i]
-            result.append(row_dict)
-    return result
+def reading_csv_file(file_csv: str) -> list:
+    """Функция считывает csv-файл и возвращает список словарей"""
+    try:
+        with open(file_csv, 'r', encoding='utf-8') as file:
+            reader = pd.read_csv(file, delimiter=',')
+        return reader.to_dict(orient='records')
+    except FileNotFoundError:
+        return []
 
 
-def func_for_read_excel(filename: str) -> list[dict]:
-    """Функция для считывания данных в формате EXCEL и возврата в виде списка словарей"""
-    result = pd.read_excel(filename).to_json()
-    return json.loads(result)
-
-
-if __name__ == "__main__":
-    test = func_for_read_csv("../data/transaction.csv")
-    print(test)
-    test2 = func_for_read_excel("../data/transactions_excel.xlsx")
-    print(test2)
+def reading_excel_file(file_excel: str) -> list:
+    """Функция считывает excel-файл и возвращает список словарей"""
+    try:
+        reader = pd.read_excel(file_excel)
+        return reader.to_dict(orient='records')
+    except FileNotFoundError:
+        return []
