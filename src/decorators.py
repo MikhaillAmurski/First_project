@@ -1,45 +1,37 @@
-from functools import wraps
+from typing import Any
 
 
-def log(filename=None):
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            """декоратор log будет логировать вызов функции и ее результат в файл или в консоль"""
+def log(filename: Any) -> Any:
+    """Декоратор, фиксирующий работу функции"""
+
+    def my_decorator(func: Any) -> Any:
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             try:
+                # time_start = time()
                 result = func(*args, **kwargs)
-
-                my_message = "my_function ok\n"
+                # time_end = time()
                 if filename:
-                    with open(filename, "a") as f:
-                        f.write(my_message)
-
+                    with open(filename, "w") as file:
+                        file.write(f"{func.__name__} ok")
+                        print(f"{func.__name__} ok")
                 else:
-                    print(my_message)
-
+                    print(f"{func.__name__} ok")
                 return result
-
             except Exception as e:
-                error_message = f"my_function error: {e}. Inputs: {args}, {kwargs}\n"
                 if filename:
-                    with open(filename, "a") as f:
-                        f.write(error_message)
+                    with open(filename, "w") as file:
+                        file.write(f"{func.__name__} error: {e.__class__.__name__}. Inputs: {args}, {kwargs}")
+                        print(f"{func.__name__} error: {e.__class__.__name__}. Inputs: {args}, {kwargs}")
                 else:
-                    print(error_message)
-                return error_message
+                    print(f"{func.__name__} error: {e.__class__.__name__}. Inputs: {args}, {kwargs}")
 
         return wrapper
 
-    return decorator
+    return my_decorator
 
 
-@log(filename="mylog.txt")
-def my_function(x, y):
+def my_function(x: int, y: int) -> int:
     return x + y
 
 
-if __name__ == "__main__":
-    print(my_function(1, "0"))
-    print(my_function(1, 3))
-    print(my_function())
-    print(my_function(1, 19))
+my_function(1, 2)
