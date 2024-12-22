@@ -1,27 +1,35 @@
-from utils import get_data_transactions
-from collections import Counter, defaultdict
-from description import description_transaction
+import re
+from collections import Counter
+from src.csv_excel_reader import reading_csv_file, reading_excel_file
+from src.utils import get_financial_transactions
 
 
-def get_count_operations_by_category(operations: list[dict], list_of_category: list) -> dict:
-    """
-
-    Функция принимает список словарей с данными о банковских операциях и список категорий операций
-    и возвращает словарь, в котором ключи — это названия категорий,
-    а значения — это количество операций в каждой категории
-
-    """
-    result = Counter(
-        [operation["description"] for operation in operations if operation["description"] in list_of_category]
-    )
-
-    return dict(result)
+json_file = get_financial_transactions('../data/operations.json')
+csv_file = reading_csv_file('../data/transactions.csv')
+excel_file = reading_excel_file('../data/transactions_excel.xlsx')
 
 
-if __name__ == '__main__':
-    path = "../data/operations.json"
-    test_try = get_data_transactions(path)
-    my_list = ["Перевод организации", "Открытие вклада"]
+def search_transactions(transactions: list[dict], search_string: str) -> list[dict]:
+    """Функция, принимает список словарей с данными о банковских операциях и строку поиска, а возвращает
+    список словарей, у которых в описании есть данная строка"""
+    result = []
+    pattern = re.compile(re.escape(search_string), re.IGNORECASE)
+    for transaction in transactions:
+        if isinstance(transaction, dict):
+            desc = transaction.get("description", "")
+            if isinstance(desc, str):
+                if re.search(pattern, desc):
+                    result.append(transaction)
 
-    result = get_count_operations_by_category(test_try, my_list)
-    print(result)
+    return result
+
+
+def get_count_transactions(transactions: list[dict], categories: list) -> dict:
+    """Функция принимает список словарей с данными о банковских операциях и список категорий операций, а возвращает
+    словарь, в котором ключи — это названия категорий, а значения — это количество операций в каждой категории."""
+    description = []
+    for transaction in transactions:
+        if transaction["description"] in categories:
+            description.append(transaction["description"])
+    counted = dict(Counter(description))
+    return counted

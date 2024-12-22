@@ -18,3 +18,4 @@ def reading_excel_file(file_excel: str) -> list:
         return reader.to_dict(orient='records')
     except FileNotFoundError:
         return []
+#+++
