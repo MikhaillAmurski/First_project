@@ -1,43 +1,67 @@
-from unittest.mock import patch, mock_open
-from src.utils import get_data_transactions
+import os
+
+import pytest
+
+from src.utils import get_financial_transactions
 
 
-def test_successful_read():
-    """Функуия-тест для проверки. что json-файл читается корректно"""
-    mock_data = (
-        '[{"id": 441945886, "state": "EXECUTED", "date": "2019-08-26T10:50:58.294041", "operationAmount": '
-        '{"amount": "31957.58", "currency": '
-        '{"name": "руб.", "code": "RUB"}}}]'
-    )
-    with patch("builtins.open", mock_open(read_data=mock_data)):
-        data = get_data_transactions("path_to_file.json")
-        assert data == [
-            {
-                "id": 441945886,
-                "state": "EXECUTED",
-                "date": "2019-08-26T10:50:58.294041",
-                "operationAmount": {
-                    "amount": "31957.58",
-                    "currency": {"name": "руб.", "code": "RUB"},
-                },
-            }
-        ]
+@pytest.fixture
+def path():
+    path_to_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations.json")
+    return path_to_file
 
 
-def test_file_not_found():
-    """проверяем ответ, при некорректном пути к файлу json"""
-    with patch("builtins.open", side_effect=FileNotFoundError):
-        data = get_data_transactions("non_path_file.json")
-        assert data == []
+@pytest.fixture
+def path_empty_list():
+    path_to_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations_1.json")
+    return path_to_file
 
 
-def test_json_decode_error():
-    """проверяем ответ, при неккоректном json файле"""
-    mock_data = (
-        '[{"id": 441945886, "state": "EXECUTED", "date": "2019-08-26T10:50:58.294041", "operationAmount": '
-        '{"amount": "31957.58", "currency": '
-    )
-    with patch("builtins.open", mock_open(read_data=mock_data)):
-        data = get_data_transactions("uncorrect_file.json")
+@pytest.fixture
+def path_mistake_json():
+    path_to_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "operations_2.json")
+    return path_to_file
 
-        assert data == []
+
+@pytest.fixture
+def trans():
+    return {
+        "id": 441945886,
+        "state": "EXECUTED",
+        "date": "2019-08-26T10:50:58.294041",
+        "operationAmount": {
+         "amount": "31957.58",
+         "currency": {
+          "name": "руб.",
+          "code": "RUB"}
+        },
+        "description": "Перевод организации",
+        "from": "Maestro 1596837868705199",
+        "to": "Счет 64686473678894779589"}
+
+
+def test_financial_transactions_nofile():
+    assert get_financial_transactions('nofile') == []
+
+
+def test_financial_transactions(path):
+    assert get_financial_transactions(path)[0] == {
+        "id": 441945886,
+        "state": "EXECUTED",
+        "date": "2019-08-26T10:50:58.294041",
+        "operationAmount": {
+            "amount": "31957.58",
+            "currency": {
+             "name": "руб.",
+             "code": "RUB"}},
+        "description": "Перевод организации",
+        "from": "Maestro 1596837868705199",
+        "to": "Счет 64686473678894779589"}
+
+
+def test_financial_transactions_empty_list(path_empty_list):
+    assert get_financial_transactions(path_empty_list) == []
+
+
+def test_financial_transactions_mistake_json(path_mistake_json):
+    assert get_financial_transactions(path_mistake_json) == []

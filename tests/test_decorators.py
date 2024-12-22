@@ -41,7 +41,7 @@ def test_log_exception(capsys):
 def test_log_in_file(capsys):
     """Тестирование вывода об успешном выполнении функции в файл"""
 
-    @log(filename="mylog.txt")
+    @log(filename="../mylog.txt")
     def my_function(x, y):
         return x + y
 
@@ -53,7 +53,7 @@ def test_log_in_file(capsys):
 def test_log_in_file_exception(capsys):
     """Тестирование вывода об ошибке фыполнении функции в файл"""
 
-    @log(filename="mylog.txt")
+    @log(filename="../mylog.txt")
     def my_function(x, y):
         return x + y
 
